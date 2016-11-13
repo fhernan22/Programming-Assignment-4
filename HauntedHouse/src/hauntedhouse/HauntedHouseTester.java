@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Fidel Hernandez
+ * @author Eduardo Morales
  */
 public class HauntedHouseTester {
     public static void main(String[] args)
