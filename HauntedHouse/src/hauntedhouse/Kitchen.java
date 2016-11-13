@@ -34,7 +34,7 @@ public class Kitchen {
         if (selection == 0)
             return "You found some delicious soul food!";
         else if (selection == 1)
-            return "The dishes and glasses started flying at you!\n" +
+            return "The dishes and glasses started flying at you! " +
                     "You get hit in the head and feel you start moving towards a light!";
         return "You decided this house was too scary and blew yourself up!";
     }

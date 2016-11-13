@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 /**
  *
  * @author Fidel Hernandez
+ * @author Eduardo Morales
  */
 public class HauntedHouse {
     private FrontDoor frontDoor;
@@ -121,7 +122,7 @@ public class HauntedHouse {
     }
     
     /**
-     * Prints a welcome message
+     * Prints a welcome message and display the initial position
      */
     public void WelcomeMessage()
     {
@@ -264,6 +265,20 @@ public class HauntedHouse {
        
     }
     
+    /**
+     * Get information about a room
+     * 
+     * Takes as input the player's current position
+     * and do the following:
+     * <ul>
+     * <li>Initialize the corresponding room object</li>
+     * <li>Get all possible destinations the player can choose</li>
+     * <li>Get all possible items in the room</li>
+     * <li>Set the player's position to the current room</li>
+     * <li>Display the current position</li>
+     * </ul>
+     * @param currentPosition player's current position
+     */
     public void openRoom(int currentPosition)
     {
         switch (currentPosition)
@@ -357,6 +372,15 @@ public class HauntedHouse {
         }
     }
     
+    /**
+     * Ask player if they want to move to another room
+     * or stay in the current room
+     * 
+     * if the player wants to move to another room choice = 0,
+     * otherwise choice = 1
+     * @param options array of options
+     * @return  player's choice
+     */
     public int displayOptions(Object[] options)
     {
         int choice;
@@ -379,6 +403,10 @@ public class HauntedHouse {
         return choice;
     }
     
+    /**
+     * Display all possible rooms player can move to.
+     * @return room player chooses to go to.
+     */
     public int switchRooms()
     {
         Object[] options = new Object[this.roomConnections.size()];
@@ -387,11 +415,9 @@ public class HauntedHouse {
                 
         for (Integer connection: this.roomConnections)
         {
-            options[i] = getRoomName(connection.intValue());
+            options[i] = getRoomName(connection);
             i++;
         }
-
-        i = 0;
 
         choice = JOptionPane.showOptionDialog(null,
                             "Wich room would you like to visit?",
@@ -405,6 +431,10 @@ public class HauntedHouse {
         return choice;
     }
     
+    /**
+     * Display all items the player can pick.
+     * @return item player chooses to pick.
+     */
     public int pickItemsInRoom()
     {
         Object[] options = new Object[this.itemsInRoom.size()];
@@ -416,8 +446,6 @@ public class HauntedHouse {
             options[i] = item;
             i++;
         }
-
-        i = 0;
 
         choice = JOptionPane.showOptionDialog(null,
                             "Wich item would you like to pick?",
@@ -431,6 +459,12 @@ public class HauntedHouse {
         return choice;
     }
     
+    /**
+     * Display the effect of selecting a particular object in
+     * a room.
+     * @param currentPosition player's current position
+     * @param choice item player chose to pick
+     */
     public void showItem(int currentPosition, int choice)
     {
         switch (currentPosition)
@@ -536,10 +570,13 @@ public class HauntedHouse {
         }
     }
     
+    /**
+     * Main game loop
+     */
     public void game()
     {
         boolean changeRoom = false;
-        //Dont worry about this variable
+        boolean hasKey = false;
         Object[] options = null;
         int choice;
         
@@ -557,6 +594,7 @@ public class HauntedHouse {
         else
         {
             showItem(this.playerPosition, choice);
+            hasKey = true;
         }
         
         while (true)
@@ -570,15 +608,16 @@ public class HauntedHouse {
             
             else
             {
+                if (hasKey == true)
+                    break;
+                
                 choice = pickItemsInRoom();
                 
                 showItem(this.playerPosition, choice);
                 changeRoom = false;
                 
-                if (this.itemsInRoom.get(choice) == "key" || this.itemsInRoom.get(choice) == "TNT")
+                if (this.itemsInRoom.get(choice).equals("key") || this.itemsInRoom.get(choice).equals("TNT"))
                     break;
-                
-                //FIXME if player picks TNT break
             }
             
             choice = displayOptions(options);

@@ -8,7 +8,14 @@ import javax.swing.JOptionPane;
 public class HauntedHouseTester {
     public static void main(String[] args)
     {   
-        String name = (String) JOptionPane.showInputDialog("Please enter your name");
+        String name;
+        
+        do
+        {
+            name = (String) JOptionPane.showInputDialog("Please enter your name!");
+        }
+        while (name.isEmpty());
+        
         
         HauntedHouse house = new HauntedHouse(name);
         house.game();
